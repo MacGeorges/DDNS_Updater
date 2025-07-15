@@ -30,15 +30,11 @@ public class ConfigManager : MonoBehaviour
     {
         string blankConfigFile = JsonUtility.ToJson(configFile);
         File.WriteAllText(configFilePath, blankConfigFile);
-
-        Debug.Log("Blank Config File Created");
     }
 
     private void LoadConfigFile()
     {
         string loadedConfigFile = File.ReadAllText(configFilePath);
         configFile = JsonUtility.FromJson<ConfigFile>(loadedConfigFile);
-
-        Debug.Log("Config File Loaded");
     }
 }

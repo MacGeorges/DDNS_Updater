@@ -6,7 +6,7 @@ public class IPManager : MonoBehaviour
 {
     [SerializeField]
     private string IPCheckURL;
-
+    [SerializeField]
     private string IP;
 
     private void Awake()
@@ -42,10 +42,9 @@ public class IPManager : MonoBehaviour
 
     private void SaveIP(string rawData)
     {
-        rawData = rawData.Split(":")[1];
+        int charIndex = rawData.IndexOf(":");
+        rawData = rawData.Remove(0, charIndex + 1);
         rawData = rawData.Split("<")[0];
         IP = rawData.Replace(" ", "");
-
-        Debug.Log("IP fetched : " + IP);
     }
 }

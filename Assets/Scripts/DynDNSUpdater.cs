@@ -50,9 +50,9 @@ public class DynDNSUpdater : MonoBehaviour
         string authorization = domain + "-" + configManager.GetConfig().UserName + ":" + configManager.GetConfig().Password;
 
         byte[] plainTextBytes = Encoding.UTF8.GetBytes(authorization);
-
         string encodedCredential = Convert.ToBase64String(plainTextBytes);
 
+        //Create Request
         UnityWebRequest webRequest = UnityWebRequest.Get(uri);
 
         webRequest.SetRequestHeader("Authorization", "Basic " + encodedCredential);

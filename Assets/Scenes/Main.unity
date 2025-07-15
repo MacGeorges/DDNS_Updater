@@ -329,7 +329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4c8213932249c346b6959b1196c05b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IPCheckURL: http://checkip.dyndns.org/
+  IPCheckURL: http://checkipv6.dyndns.org/
 --- !u!4 &1281718862
 Transform:
   m_ObjectHideFlags: 0

@@ -42,29 +42,21 @@ public class DynDNSUpdater : MonoBehaviour
 
     IEnumerator SetIP()
     {
+        //Create URL
         string uri = configManager.GetConfig().ServiceURL;
         uri = uri.Replace("$HOSTNAME", configManager.GetConfig().HostName);
         uri = uri.Replace("$IP", ipManager.GetIP());
 
-        Debug.Log("URL : " + uri);
-
-        //myfriendbob.fr-bob:BobUpdatePass1
-        //bXlmcmllbmRib2IuZnItYm9iOkJvYlVwZGF0ZVBhc3Mx
-
+        //Create Credentials
         int charIndex = configManager.GetConfig().HostName.IndexOf(".");
         string domain = configManager.GetConfig().HostName.Remove(0, charIndex + 1);
         string authorization = domain + "-" + configManager.GetConfig().UserName + ":" + configManager.GetConfig().Password;
 
-        //byte[] plainTextBytes = Encoding.UTF8.GetBytes(authorization);
-        byte[] plainTextBytes = ASCIIEncoding.ASCII.GetBytes(authorization);
+        byte[] plainTextBytes = Encoding.UTF8.GetBytes(authorization);
 
         string encodedCredential = Convert.ToBase64String(plainTextBytes);
 
         UnityWebRequest webRequest = UnityWebRequest.Get(uri);
-
-        Debug.Log("Basic " + encodedCredential);
-
-        //webRequest.Headers.Add("Authorization", "Basic " + svcCredentials);
 
         webRequest.SetRequestHeader("Authorization", "Basic " + encodedCredential);
 
@@ -78,23 +70,5 @@ public class DynDNSUpdater : MonoBehaviour
         {
             Debug.LogError("ERROR : " + webRequest.error);
         }
-
-        /*using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
-        {
-            // Request and wait for the desired page.
-            yield return webRequest.SendWebRequest();
-
-
-            switch (webRequest.result)
-            {
-                case UnityWebRequest.Result.Success:
-                    Debug.Log("Received : " + webRequest.downloadHandler.text);
-                    break;
-                default:
-                    Debug.LogError("ERROR : " + webRequest.error);
-                    break;
-
-            }
-        }*/
     }
 }

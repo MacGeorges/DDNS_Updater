@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.Text;
-using System.Threading;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -36,7 +34,6 @@ public class DynDNSUpdater : MonoBehaviour
 
     private void UpdateIP()
     {
-        Debug.Log("Update IP");
         StartCoroutine(SetIP());
     }
 
@@ -64,7 +61,7 @@ public class DynDNSUpdater : MonoBehaviour
 
         if(webRequest.result == UnityWebRequest.Result.Success)
         {
-            Debug.Log("Received : " + webRequest.downloadHandler.text);
+            Debug.Log("IP Update OK : " + webRequest.downloadHandler.text);
         }
         else
         {

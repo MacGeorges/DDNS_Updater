@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -6,22 +7,15 @@ public class IPManager : MonoBehaviour
 {
     [SerializeField]
     private string IPCheckURL;
-    [SerializeField]
-    private string IP;
 
-    private void Awake()
+    public void GetIP(Action<string> callback)
     {
-        StartCoroutine(GetIP(IPCheckURL));
+        StartCoroutine(GetIPCoroutine(callback));
     }
 
-    public string GetIP()
+    IEnumerator GetIPCoroutine(Action<string> callback)
     {
-        return IP;
-    }
-
-    IEnumerator GetIP(string uri)
-    {
-        using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
+        using (UnityWebRequest webRequest = UnityWebRequest.Get(IPCheckURL))
         {
             // Request and wait for the desired page.
             yield return webRequest.SendWebRequest();
@@ -30,21 +24,23 @@ public class IPManager : MonoBehaviour
             switch (webRequest.result)
             {
                 case UnityWebRequest.Result.Success:
-                    SaveIP(webRequest.downloadHandler.text);
+                    callback.Invoke(FormatIP(webRequest.downloadHandler.text));
                     break;
                 default:
                     Debug.LogError("ERROR : " + webRequest.error);
+                    callback.Invoke(null);
                     break;
-
             }
         }
     }
 
-    private void SaveIP(string rawData)
+    private string FormatIP(string rawData)
     {
         int charIndex = rawData.IndexOf(":");
         rawData = rawData.Remove(0, charIndex + 1);
         rawData = rawData.Split("<")[0];
-        IP = rawData.Replace(" ", "");
+        string formatedIP = rawData.Replace(" ", "");
+
+        return formatedIP;
     }
 }

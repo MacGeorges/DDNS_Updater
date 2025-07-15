@@ -19,30 +19,30 @@ public class DynDNSUpdater : MonoBehaviour
 
         if(currentDelay >= configManager.GetConfig().UpdateInterval)
         {
-            if (string.IsNullOrEmpty(ipManager.GetIP()))
-            {
-                Debug.LogError("No IP Fetched. Could not Update");
-            }
-            else
-            {
-                UpdateIP();
-            }
+            ipManager.GetIP(UpdateIP);
             
             currentDelay = 0;
         }
     }
 
-    private void UpdateIP()
+    private void UpdateIP(string updatedIP)
     {
-        StartCoroutine(SetIP());
+        if (string.IsNullOrEmpty(updatedIP))
+        {
+            Debug.LogError("No IP Fetched. Could not Update");
+        }
+        else
+        {
+            StartCoroutine(SetIP(updatedIP));
+        }
     }
 
-    IEnumerator SetIP()
+    IEnumerator SetIP(string updatedIP)
     {
         //Create URL
         string uri = configManager.GetConfig().ServiceURL;
         uri = uri.Replace("$HOSTNAME", configManager.GetConfig().HostName);
-        uri = uri.Replace("$IP", ipManager.GetIP());
+        uri = uri.Replace("$IP", updatedIP);
 
         //Create Credentials
         int charIndex = configManager.GetConfig().HostName.IndexOf(".");
